@@ -1,0 +1,134 @@
+.hod{
+  margin-left: 6%;
+  margin-right: 6%;
+  margin-top: 2.5%;
+}
+.aks{
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+.space{
+    margin-top: 55%;
+}
+.toggle
+{
+  position: relative;
+  width: 60px;
+  height: 60px;
+  background-repeat: no-repeat;
+  background-size: 30px;
+  background-position: center;
+  cursor: pointer;
+}
+.toggle.active
+{
+  background-repeat: no-repeat;
+  background-size: 25px;
+  background-position: center;
+  cursor: pointer;
+}
+.showcase
+{
+  position: absolute;
+  right: 0;
+  width: 100%;
+  min-height: 100vh;
+  padding: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #111;
+  transition: 0.5s;
+  z-index: 2;
+}
+.showcase.active
+{
+  right: 300px;
+}
+
+.showcase video
+{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.9;
+}
+.overlay
+{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #03a9f4;
+  mix-blend-mode: overlay;
+}
+.text
+{
+  position: relative;
+  z-index: 10;
+}
+.text .headss
+{
+  font-size: 2em;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1em;
+  padding-top: 1%;
+  text-transform: uppercase;
+}
+.text .head
+{
+  font-size: 5em;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1em;
+  text-transform: uppercase;
+}
+.text .para
+{
+  font-size: 1.1em;
+  color: #fff;
+  margin: 20px 0;
+  font-weight: 400;
+  max-width: 700px;
+  padding-top: 1%;
+}
+
+@media (max-width: 991px)
+{
+  .text .head
+  {
+    font-size: 3em;
+  }
+  .space{
+    margin-top: 230%;
+  }
+}
+
+@media (max-width: 1024px)
+{
+  .text .head
+  {
+    font-size: 2em;
+  }
+  .space{
+    margin-top: 150%;
+  }
+}
+
+@media (max-width: 480px)
+{
+  .text .head .para
+  {
+    text-align:center;
+    font-size: 3em;
+  }
+  .space{
+    margin-top: 230%;
+  }
+}
