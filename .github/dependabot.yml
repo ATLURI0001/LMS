@@ -1,0 +1,23 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+  - package-ecosystem: npm
+    directories:
+      - /python-fullstack/frontend
+      - /java-fullstack/frontend
+      - /mern-fullstack/frontend
+      - /mern-fullstack/backend
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: pip
+    directory: /python-fullstack/backend
+    schedule:
+      interval: weekly
+  - package-ecosystem: maven
+    directory: /java-fullstack/backend
+    schedule:
+      interval: weekly

@@ -1,0 +1,301 @@
+{
+  "users": [
+    {
+      "id": "user-admin",
+      "name": "Campus Admin",
+      "email": "admin@ascent.local",
+      "role": "admin",
+      "active": true
+    },
+    {
+      "id": "user-instructor",
+      "name": "Aarav Mentor",
+      "email": "instructor@ascent.local",
+      "role": "instructor",
+      "active": true
+    },
+    {
+      "id": "user-student",
+      "name": "Maya Learner",
+      "email": "student@ascent.local",
+      "role": "student",
+      "active": true
+    }
+  ],
+  "courses": [
+    {
+      "id": "course-web",
+      "title": "Full-stack foundations",
+      "description": "Build your first complete product: browser, API, database, and a deployable application.",
+      "category": "Web development",
+      "level": "Beginner",
+      "color": "violet",
+      "status": "published",
+      "owner_id": "user-instructor"
+    },
+    {
+      "id": "course-python",
+      "title": "Python API engineering",
+      "description": "Turn clean Python into reliable services with validation, relational data, and automated checks.",
+      "category": "Python",
+      "level": "Intermediate",
+      "color": "mint",
+      "status": "published",
+      "owner_id": "user-instructor"
+    },
+    {
+      "id": "course-ship",
+      "title": "Hackathon launchpad",
+      "description": "Scope a strong idea, work as a team, and present a product judges can actually try.",
+      "category": "Hackathons",
+      "level": "Beginner",
+      "color": "peach",
+      "status": "published",
+      "owner_id": "user-instructor"
+    }
+  ],
+  "lessons": [
+    {
+      "id": "web-lesson-1",
+      "course_id": "course-web",
+      "title": "From click to database",
+      "body": "A web application has three cooperating layers: the interface, the server, and persistent storage.\n\nThe browser sends an HTTP request. The API authenticates the user, validates input, applies business rules, and queries the database. The response updates the interface.\n\nLab: sketch the request flow for joining a course. Mark the point at which authorization must be checked.",
+      "resource_url": "https://developer.mozilla.org/en-US/docs/Learn_web_development",
+      "position": 1,
+      "minutes": 15
+    },
+    {
+      "id": "web-lesson-2",
+      "course_id": "course-web",
+      "title": "Design a useful API",
+      "body": "Represent resources with clear routes. Use GET for reads and POST for creation. Validate input on the server even when the interface also validates it.\n\nUse 401 for missing authentication, 403 for denied access, 404 for missing resources, and 409 for conflicts.\n\nLab: define endpoints and response shapes for a campus lost-and-found service.",
+      "resource_url": "https://developer.mozilla.org/en-US/docs/Web/HTTP",
+      "position": 2,
+      "minutes": 20
+    },
+    {
+      "id": "web-lesson-3",
+      "course_id": "course-web",
+      "title": "Store data with intent",
+      "body": "Give each entity a stable ID. Relate enrollments to both users and courses. Unique constraints stop duplicate relationships even under simultaneous requests.\n\nNever store plaintext passwords. Treat authorization and data validation as server responsibilities.\n\nLab: draw the tables or collections for your project and identify three invariants.",
+      "resource_url": "https://www.postgresql.org/docs/current/tutorial.html",
+      "position": 3,
+      "minutes": 25
+    },
+    {
+      "id": "python-lesson-1",
+      "course_id": "course-python",
+      "title": "Model the boundary",
+      "body": "Inputs from HTTP are untrusted. Validate required fields, types, lengths, and allowed values before using them.\n\nSeparate request handling, business rules, and persistence. This makes each responsibility easier to explain and test.\n\nLab: validate an assignment submission containing a text response and an optional HTTPS repository URL.",
+      "resource_url": "https://fastapi.tiangolo.com/tutorial/",
+      "position": 1,
+      "minutes": 15
+    },
+    {
+      "id": "python-lesson-2",
+      "course_id": "course-python",
+      "title": "Transactions and invariants",
+      "body": "A transaction groups related database changes. Either all changes commit, or none do.\n\nJoining a team and recording membership should not leave a half-created result. Unique constraints are a second line of defense.\n\nLab: write a test that sends the same enrollment twice.",
+      "resource_url": "https://docs.python.org/3/library/sqlite3.html",
+      "position": 2,
+      "minutes": 20
+    },
+    {
+      "id": "python-lesson-3",
+      "course_id": "course-python",
+      "title": "Test behavior, not screenshots",
+      "body": "API tests should exercise success and failure. Verify authentication, ownership, empty values, deadlines, and repeated requests.\n\nLab: test that a student cannot publish a course and that an instructor cannot grade another instructor\u2019s assignment.",
+      "resource_url": "https://docs.pytest.org/en/stable/",
+      "position": 3,
+      "minutes": 25
+    },
+    {
+      "id": "ship-lesson-1",
+      "course_id": "course-ship",
+      "title": "Choose one painful problem",
+      "body": "Talk to a potential user before designing a large feature list. Describe one problem, one audience, and one observable improvement.\n\nLab: write a three-sentence problem statement. Record what is assumed and what is verified.",
+      "resource_url": "https://www.ycombinator.com/library",
+      "position": 1,
+      "minutes": 15
+    },
+    {
+      "id": "ship-lesson-2",
+      "course_id": "course-ship",
+      "title": "Build the smallest complete journey",
+      "body": "A complete vertical slice lets someone accomplish a real task. Build sign-in, one useful workflow, persistence, and a clear result before adding extras.\n\nLab: divide your team by ownership and agree on API shapes before implementation.",
+      "resource_url": "https://docs.github.com/en/issues",
+      "position": 2,
+      "minutes": 20
+    },
+    {
+      "id": "ship-lesson-3",
+      "course_id": "course-ship",
+      "title": "Tell a credible demo story",
+      "body": "Start with the user\u2019s problem. Show the working flow. Explain your architecture, one technical tradeoff, and what you would build next.\n\nCredit dependencies and teammates. Keep a local fallback ready in case the network fails.\n\nLab: rehearse a three-minute demo with another team.",
+      "resource_url": "https://docs.github.com/en/get-started",
+      "position": 3,
+      "minutes": 25
+    }
+  ],
+  "questions": [
+    {
+      "id": "web-question-1",
+      "course_id": "course-web",
+      "prompt": "Where should authorization be enforced?",
+      "options": [
+        "Only in CSS",
+        "On the server for each protected operation",
+        "Only when the page loads",
+        "In a README"
+      ],
+      "correct": 1,
+      "explanation": "Clients can be modified. The server must enforce access rules."
+    },
+    {
+      "id": "web-question-2",
+      "course_id": "course-web",
+      "prompt": "Which status means a resource conflicts with existing state?",
+      "options": [
+        "200",
+        "401",
+        "409",
+        "500"
+      ],
+      "correct": 2,
+      "explanation": "409 signals a conflict such as an existing enrollment."
+    },
+    {
+      "id": "web-question-3",
+      "course_id": "course-web",
+      "prompt": "What prevents duplicate enrollments reliably?",
+      "options": [
+        "A disabled button alone",
+        "A database uniqueness constraint",
+        "A longer course title",
+        "Browser history"
+      ],
+      "correct": 1,
+      "explanation": "Database constraints remain effective when requests race."
+    },
+    {
+      "id": "python-question-1",
+      "course_id": "course-python",
+      "prompt": "What should a transaction guarantee?",
+      "options": [
+        "Partial writes are always kept",
+        "Related changes commit together or roll back",
+        "The UI is blue",
+        "No tests are needed"
+      ],
+      "correct": 1,
+      "explanation": "Transactions preserve consistency across related writes."
+    },
+    {
+      "id": "python-question-2",
+      "course_id": "course-python",
+      "prompt": "Which input should be validated?",
+      "options": [
+        "Only passwords",
+        "Only values from strangers",
+        "Every untrusted request field",
+        "Nothing from a form"
+      ],
+      "correct": 2,
+      "explanation": "Browser validation does not establish trust."
+    },
+    {
+      "id": "ship-question-1",
+      "course_id": "course-ship",
+      "prompt": "What is the best first delivery target?",
+      "options": [
+        "Twenty unfinished screens",
+        "One complete useful journey",
+        "A logo only",
+        "A long slide deck"
+      ],
+      "correct": 1,
+      "explanation": "A complete journey proves the system works end to end."
+    },
+    {
+      "id": "ship-question-2",
+      "course_id": "course-ship",
+      "prompt": "What belongs in a credible demo?",
+      "options": [
+        "Unsupported user metrics",
+        "Working behavior and honest limitations",
+        "Only promises",
+        "Hidden dependencies"
+      ],
+      "correct": 1,
+      "explanation": "Judges should be able to verify your claims."
+    }
+  ],
+  "assignments": [
+    {
+      "id": "web-assignment",
+      "course_id": "course-web",
+      "title": "Build and explain your solution",
+      "description": "Implement the labs as a small working project. Submit your repository URL and explain your data model, validation, and one design tradeoff.",
+      "due_at": "2026-11-21T06:09:38Z",
+      "max_score": 100
+    },
+    {
+      "id": "python-assignment",
+      "course_id": "course-python",
+      "title": "Build and explain your solution",
+      "description": "Implement the labs as a small working project. Submit your repository URL and explain your data model, validation, and one design tradeoff.",
+      "due_at": "2026-11-21T06:09:38Z",
+      "max_score": 100
+    },
+    {
+      "id": "ship-assignment",
+      "course_id": "course-ship",
+      "title": "Build and explain your solution",
+      "description": "Implement the labs as a small working project. Submit your repository URL and explain your data model, validation, and one design tradeoff.",
+      "due_at": "2026-11-21T06:09:38Z",
+      "max_score": 100
+    }
+  ],
+  "announcements": [
+    {
+      "id": "announcement-welcome",
+      "course_id": "",
+      "author_id": "user-admin",
+      "title": "Your next idea starts here",
+      "body": "Welcome to Ascent. Pick a learning path, complete the labs, and bring a working project to the campus challenge."
+    }
+  ],
+  "challenges": [
+    {
+      "id": "challenge-campus",
+      "title": "Build a better campus",
+      "description": "Solve one everyday campus problem with a usable full-stack product. Submit a repository, a live demo, and a short explanation of your architecture. Judges score usefulness, engineering, and presentation.",
+      "max_members": 4,
+      "deadline": "2026-11-14T06:09:38Z",
+      "status": "open",
+      "owner_id": "user-instructor"
+    }
+  ],
+  "enrollments": [
+    {
+      "id": "enrollment-demo",
+      "course_id": "course-web",
+      "user_id": "user-student"
+    }
+  ],
+  "completions": [
+    {
+      "id": "completion-demo",
+      "user_id": "user-student",
+      "lesson_id": "web-lesson-1",
+      "course_id": "course-web"
+    }
+  ],
+  "attempts": [],
+  "submissions": [],
+  "discussions": [],
+  "teams": [],
+  "memberships": [],
+  "projects": [],
+  "certificates": []
+}

@@ -1,0 +1,1 @@
+{"users":[["email"]],"enrollments":[["user_id","course_id"]],"completions":[["user_id","lesson_id"]],"submissions":[["user_id","assignment_id"]],"memberships":[["user_id","challenge_id"]],"projects":[["team_id"]],"certificates":[["user_id","course_id"]]}

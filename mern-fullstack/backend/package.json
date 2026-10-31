@@ -1,0 +1,23 @@
+{
+  "name": "ascent-lms-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "admin": "node src/admin.js",
+    "test": "node --test tests/*.test.js && node ../tests/run_mongo.cjs"
+  },
+  "dependencies": {
+    "cookie-parser": "1.4.7",
+    "dotenv": "18.0.9",
+    "express": "5.3.0",
+    "express-rate-limit": "8.7.2",
+    "helmet": "8.3.0",
+    "mongoose": "9.11.4"
+  },
+  "devDependencies": {
+    "mongodb-memory-server": "11.3.0"
+  }
+}

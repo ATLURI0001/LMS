@@ -1,0 +1,25 @@
+{
+  "result": "PASS",
+  "checks": 115,
+  "base_url": "http://127.0.0.1:8011/api/",
+  "coverage": [
+    "authentication",
+    "roles",
+    "course lifecycle",
+    "curriculum lock",
+    "content visibility",
+    "quiz integrity",
+    "assignment grading",
+    "certificates",
+    "discussion",
+    "announcements",
+    "teams",
+    "concurrency",
+    "project judging",
+    "leaderboard",
+    "session revocation",
+    "CSRF origin validation",
+    "JSON media type validation",
+    "64 KiB request limit"
+  ]
+}
