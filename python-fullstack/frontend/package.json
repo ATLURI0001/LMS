@@ -10,7 +10,7 @@
     "test": "node --test tests/*.test.js"
   },
   "dependencies": {
-    "lucide-react": "1.65.0",
+    "lucide-react": "1.67.0",
     "react": "19.3.1",
     "react-dom": "19.3.1"
   },
