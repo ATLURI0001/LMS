@@ -40,3 +40,30 @@ class SecurityTests(unittest.TestCase):
         self.assertTrue(verify_password(" whitespace password ", first))
         self.assertFalse(verify_password("whitespace password", first))
         self.assertFalse(verify_password("anything", "malformed"))
+
+    def test_verify_password_bounds_and_malformed(self):
+        self.assertFalse(verify_password("pass", None))
+        self.assertFalse(verify_password(None, "600000$salt$digest"))
+        self.assertFalse(verify_password("pass", 12345))
+        # Iterations out of safe range
+        self.assertFalse(verify_password("pass", "50000$salt$digest"))
+        self.assertFalse(verify_password("pass", "10000000$salt$digest"))
+        self.assertFalse(verify_password("pass", "-100$salt$digest"))
+        self.assertFalse(verify_password("pass", "notanint$salt$digest"))
+        self.assertFalse(verify_password("pass", "600000$$"))
+
+    def test_hash_password_validation(self):
+        with self.assertRaises(ValueError):
+            hash_password("")
+        with self.assertRaises(ValueError):
+            hash_password(None)
+
+    def test_token_hash_validation(self):
+        from security import token_hash
+        th = token_hash("session_token_123")
+        self.assertIsInstance(th, str)
+        self.assertEqual(len(th), 64)
+        with self.assertRaises(ValueError):
+            token_hash("")
+        with self.assertRaises(ValueError):
+            token_hash(None)
