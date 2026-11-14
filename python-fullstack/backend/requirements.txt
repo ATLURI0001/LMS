@@ -1,7 +1,7 @@
 annotated-doc==0.0.5
 annotated-types==0.8.0
 anyio==4.15.1
-click==8.5.0
+click==8.5.1
 fastapi==0.162.0
 h11==0.16.0
 idna==3.20
