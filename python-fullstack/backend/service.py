@@ -18,7 +18,11 @@ def need(condition, message="Forbidden", status=403):
 
 
 def text(data, key, min_len=1, max_len=200):
-    value = data.get(key, "")
+    value = data.get(key)
+    if value is None and min_len == 0:
+        return ""
+    if value is None and key not in data:
+        value = ""
     need(isinstance(value, str), f"{key} must be text", 422)
     value = value.strip()
     need(
@@ -39,6 +43,21 @@ def integer(data, key, low, high):
     return value
 
 
+def boolean(data, key, default=False):
+    if key not in data or data[key] is None:
+        return default
+    val = data[key]
+    if isinstance(val, bool):
+        return val
+    if isinstance(val, str):
+        v = val.strip().lower()
+        if v in ("true", "1", "yes", "on"):
+            return True
+        if v in ("false", "0", "no", "off"):
+            return False
+    raise ApiError(422, f"{key} must be a boolean")
+
+
 def choice(data, key, options):
     value = text(data, key)
     need(value in options, f"Invalid {key}", 422)
@@ -48,15 +67,21 @@ def choice(data, key, options):
 def url(data, key, required=False):
     value = text(data, key, 1 if required else 0, 2000)
     if value:
-        p = urlparse(value)
-        need(
-            p.scheme in ("http", "https")
-            and bool(p.hostname)
-            and not p.username
-            and not p.password,
-            f"{key} must be an HTTP(S) URL",
-            422,
-        )
+        try:
+            p = urlparse(value)
+            port = p.port
+            valid_port = port is None or (1 <= port <= 65535)
+            need(
+                p.scheme in ("http", "https")
+                and bool(p.hostname)
+                and valid_port
+                and not p.username
+                and not p.password,
+                f"{key} must be an HTTP(S) URL",
+                422,
+            )
+        except (ValueError, TypeError):
+            raise ApiError(422, f"{key} must be an HTTP(S) URL")
     return value
 
 
@@ -70,7 +95,7 @@ def date(data, key):
             .isoformat(timespec="seconds")
             .replace("+00:00", "Z")
         )
-    except ValueError:
+    except (ValueError, TypeError):
         raise ApiError(422, f"Invalid {key}")
 
 
