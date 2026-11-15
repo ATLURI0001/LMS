@@ -1,5 +1,6 @@
 """Application rules shared by the REST endpoints; kept independent of FastAPI."""
 
+import math
 import re
 from datetime import datetime, timezone
 from urllib.parse import urlparse
@@ -83,6 +84,59 @@ def url(data, key, required=False):
         except (ValueError, TypeError):
             raise ApiError(422, f"{key} must be an HTTP(S) URL")
     return value
+
+
+def email(data, key, required=True):
+    val = text(data, key, 1 if required else 0, 254)
+    if not val:
+        return ""
+    pattern = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+    need(
+        re.match(pattern, val) is not None and ".." not in val,
+        f"{key} must be a valid email address",
+        422,
+    )
+    return val.lower()
+
+
+def number(data, key, low=None, high=None):
+    value = data.get(key)
+    need(
+        isinstance(value, (int, float))
+        and not isinstance(value, bool)
+        and math.isfinite(value),
+        f"{key} must be a number",
+        422,
+    )
+    fval = float(value)
+    if low is not None:
+        need(fval >= low, f"{key} must be at least {low}", 422)
+    if high is not None:
+        need(fval <= high, f"{key} must be at most {high}", 422)
+    return fval
+
+
+def string_list(data, key, min_items=0, max_items=100, item_min_len=1, item_max_len=100):
+    val = data.get(key)
+    if val is None and min_items == 0 and key not in data:
+        return []
+    need(isinstance(val, (list, tuple)), f"{key} must be a list", 422)
+    need(
+        min_items <= len(val) <= max_items,
+        f"{key} must contain {min_items}–{max_items} items",
+        422,
+    )
+    result = []
+    for item in val:
+        need(isinstance(item, str), f"Items in {key} must be text", 422)
+        s = item.strip()
+        need(
+            item_min_len <= len(s) <= item_max_len,
+            f"Items in {key} must be {item_min_len}–{item_max_len} characters",
+            422,
+        )
+        result.append(s)
+    return result
 
 
 def date(data, key):
