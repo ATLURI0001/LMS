@@ -1,5 +1,5 @@
 import pytest
-from service import ApiError, boolean, choice, date, integer, text, url
+from service import ApiError, boolean, choice, date, email, integer, number, string_list, text, url
 
 
 def test_text_validator():
@@ -113,3 +113,60 @@ def test_date_validator():
     # Invalid date format
     with pytest.raises(ApiError):
         date({"due": "invalid-date-string"}, "due")
+
+
+def test_email_validator():
+    assert email({"mail": "Student@Example.Com"}, "mail") == "student@example.com"
+    assert email({"mail": "admin+test@domain.co.uk"}, "mail") == "admin+test@domain.co.uk"
+
+    # Optional email
+    assert email({}, "mail", required=False) == ""
+    assert email({"mail": ""}, "mail", required=False) == ""
+
+    # Required missing
+    with pytest.raises(ApiError):
+        email({}, "mail", required=True)
+
+    # Invalid formats
+    with pytest.raises(ApiError):
+        email({"mail": "not-an-email"}, "mail")
+    with pytest.raises(ApiError):
+        email({"mail": "missing-domain@"}, "mail")
+    with pytest.raises(ApiError):
+        email({"mail": "user..name@example.com"}, "mail")
+
+
+def test_number_validator():
+    assert number({"grade": 95.5}, "grade") == 95.5
+    assert number({"grade": 100}, "grade", low=0, high=100) == 100.0
+    assert number({"grade": 0}, "grade", low=0, high=100) == 0.0
+
+    # Bounds
+    with pytest.raises(ApiError):
+        number({"grade": -0.1}, "grade", low=0)
+    with pytest.raises(ApiError):
+        number({"grade": 100.1}, "grade", high=100)
+
+    # Non-numbers / booleans / NaN
+    with pytest.raises(ApiError):
+        number({"grade": True}, "grade")
+    with pytest.raises(ApiError):
+        number({"grade": float("nan")}, "grade")
+    with pytest.raises(ApiError):
+        number({"grade": "95.5"}, "grade")
+
+
+def test_string_list_validator():
+    assert string_list({"tags": ["python", "algorithms"]}, "tags") == ["python", "algorithms"]
+    assert string_list({"tags": ["  spaced  "]}, "tags") == ["spaced"]
+    assert string_list({}, "tags", min_items=0) == []
+
+    # Item length / min items
+    with pytest.raises(ApiError):
+        string_list({"tags": []}, "tags", min_items=1)
+    with pytest.raises(ApiError):
+        string_list({"tags": [""]}, "tags", item_min_len=1)
+    with pytest.raises(ApiError):
+        string_list({"tags": [123]}, "tags")
+    with pytest.raises(ApiError):
+        string_list({"tags": "not-a-list"}, "tags")
