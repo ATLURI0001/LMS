@@ -1,5 +1,5 @@
 import pytest
-from service import ApiError, boolean, choice, date, email, integer, number, slug, string_list, text, url, uuid
+from service import ApiError, boolean, choice, date, email, hex_color, integer, iso_date_only, number, slug, string_list, text, url, uuid
 
 
 def test_text_validator():
@@ -213,4 +213,50 @@ def test_slug_validator():
         slug({"s": "trailing-hyphen-"}, "s")
     with pytest.raises(ApiError):
         slug({"s": "double--hyphen"}, "s")
+
+
+def test_hex_color_validator():
+    # Valid hex colors
+    assert hex_color({"c": "#fff"}, "c") == "#fff"
+    assert hex_color({"c": "#FFFFFF"}, "c") == "#ffffff"
+    assert hex_color({"c": "#336699"}, "c") == "#336699"
+    assert hex_color({"c": "#aabbcc88"}, "c") == "#aabbcc88"
+
+    # Optional color
+    assert hex_color({}, "c", required=False) == ""
+    assert hex_color({"c": ""}, "c", required=False) == ""
+
+    # Required missing
+    with pytest.raises(ApiError):
+        hex_color({}, "c", required=True)
+
+    # Invalid formats
+    with pytest.raises(ApiError):
+        hex_color({"c": "ffffff"}, "c")  # missing hash
+    with pytest.raises(ApiError):
+        hex_color({"c": "#ggg"}, "c")  # non-hex chars
+    with pytest.raises(ApiError):
+        hex_color({"c": "#12345"}, "c")  # 5 digits invalid length
+
+
+def test_iso_date_only_validator():
+    # Valid dates
+    assert iso_date_only({"d": "2026-11-16"}, "d") == "2026-11-16"
+    assert iso_date_only({"d": "2000-01-01"}, "d") == "2000-01-01"
+
+    # Optional date
+    assert iso_date_only({}, "d", required=False) == ""
+    assert iso_date_only({"d": ""}, "d", required=False) == ""
+
+    # Required missing
+    with pytest.raises(ApiError):
+        iso_date_only({}, "d", required=True)
+
+    # Invalid syntax or calendar dates
+    with pytest.raises(ApiError):
+        iso_date_only({"d": "2026/11/16"}, "d")
+    with pytest.raises(ApiError):
+        iso_date_only({"d": "2026-02-31"}, "d")  # invalid day
+    with pytest.raises(ApiError):
+        iso_date_only({"d": "2026-13-01"}, "d")  # invalid month
 

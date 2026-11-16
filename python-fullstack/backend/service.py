@@ -161,6 +161,29 @@ def slug(data, key, min_len=1, max_len=80, required=True):
     return val
 
 
+def hex_color(data, key, required=True):
+    val = text(data, key, 1 if required else 0, 9)
+    if not val:
+        return ""
+    pattern = r"^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$"
+    need(re.match(pattern, val) is not None, f"{key} must be a valid hex color code", 422)
+    return val.lower()
+
+
+def iso_date_only(data, key, required=True):
+    val = text(data, key, 1 if required else 0, 10)
+    if not val:
+        return ""
+    pattern = r"^\d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01])$"
+    need(re.match(pattern, val) is not None, f"{key} must be a valid YYYY-MM-DD date", 422)
+    try:
+        from datetime import date as dt_date
+        dt_date.fromisoformat(val)
+    except ValueError:
+        raise ApiError(422, f"{key} must be a valid calendar date")
+    return val
+
+
 def date(data, key):
     value = text(data, key, 1, 40)
     try:
