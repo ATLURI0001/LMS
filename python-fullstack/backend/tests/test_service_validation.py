@@ -1,5 +1,5 @@
 import pytest
-from service import ApiError, boolean, choice, date, email, integer, number, string_list, text, url
+from service import ApiError, boolean, choice, date, email, integer, number, slug, string_list, text, url, uuid
 
 
 def test_text_validator():
@@ -170,3 +170,47 @@ def test_string_list_validator():
         string_list({"tags": [123]}, "tags")
     with pytest.raises(ApiError):
         string_list({"tags": "not-a-list"}, "tags")
+
+
+def test_uuid_validator():
+    valid = "123e4567-e89b-12d3-a456-426614174000"
+    assert uuid({"id": valid}, "id") == valid
+    assert uuid({"id": valid.upper()}, "id") == valid  # lowercase normalization
+
+    # Optional UUID
+    assert uuid({}, "id", required=False) == ""
+    assert uuid({"id": ""}, "id", required=False) == ""
+
+    # Required missing
+    with pytest.raises(ApiError):
+        uuid({}, "id", required=True)
+
+    # Malformed UUIDs
+    with pytest.raises(ApiError):
+        uuid({"id": "not-a-uuid"}, "id")
+    with pytest.raises(ApiError):
+        uuid({"id": "123e4567-e89b-12d3-a456-42661417400"}, "id")  # too short
+
+
+def test_slug_validator():
+    assert slug({"s": "intro-to-algorithms"}, "s") == "intro-to-algorithms"
+    assert slug({"s": "cs101"}, "s") == "cs101"
+
+    # Optional slug
+    assert slug({}, "s", required=False) == ""
+    assert slug({"s": ""}, "s", required=False) == ""
+
+    # Required missing
+    with pytest.raises(ApiError):
+        slug({}, "s", required=True)
+
+    # Invalid characters / consecutive hyphens
+    with pytest.raises(ApiError):
+        slug({"s": "Intro_to_Algorithms"}, "s")
+    with pytest.raises(ApiError):
+        slug({"s": "-leading-hyphen"}, "s")
+    with pytest.raises(ApiError):
+        slug({"s": "trailing-hyphen-"}, "s")
+    with pytest.raises(ApiError):
+        slug({"s": "double--hyphen"}, "s")
+

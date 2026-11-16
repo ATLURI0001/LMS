@@ -139,6 +139,28 @@ def string_list(data, key, min_items=0, max_items=100, item_min_len=1, item_max_
     return result
 
 
+def uuid(data, key, required=True):
+    val = text(data, key, 1 if required else 0, 36)
+    if not val:
+        return ""
+    pattern = r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    need(re.match(pattern, val) is not None, f"{key} must be a valid UUID", 422)
+    return val.lower()
+
+
+def slug(data, key, min_len=1, max_len=80, required=True):
+    val = text(data, key, min_len if required else 0, max_len)
+    if not val:
+        return ""
+    pattern = r"^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    need(
+        re.match(pattern, val) is not None,
+        f"{key} must be a lowercase URL slug",
+        422,
+    )
+    return val
+
+
 def date(data, key):
     value = text(data, key, 1, 40)
     try:
