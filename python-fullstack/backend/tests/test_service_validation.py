@@ -1,5 +1,5 @@
 import pytest
-from service import ApiError, boolean, choice, date, email, hex_color, integer, iso_date_only, number, slug, string_list, text, url, uuid
+from service import ApiError, boolean, choice, date, email, hex_color, integer, iso_date_only, number, phone_number, semver, slug, string_list, text, url, uuid
 
 
 def test_text_validator():
@@ -259,4 +259,52 @@ def test_iso_date_only_validator():
         iso_date_only({"d": "2026-02-31"}, "d")  # invalid day
     with pytest.raises(ApiError):
         iso_date_only({"d": "2026-13-01"}, "d")  # invalid month
+
+
+def test_semver_validator():
+    # Valid semantic versions
+    assert semver({"v": "1.0.0"}, "v") == "1.0.0"
+    assert semver({"v": "0.1.2-alpha.1"}, "v") == "0.1.2-alpha.1"
+    assert semver({"v": "2.3.4+build.2026"}, "v") == "2.3.4+build.2026"
+
+    # Optional semver
+    assert semver({}, "v", required=False) == ""
+    assert semver({"v": ""}, "v", required=False) == ""
+
+    # Required missing
+    with pytest.raises(ApiError):
+        semver({}, "v", required=True)
+
+    # Invalid formats
+    with pytest.raises(ApiError):
+        semver({"v": "1.0"}, "v")
+    with pytest.raises(ApiError):
+        semver({"v": "01.0.0"}, "v")
+    with pytest.raises(ApiError):
+        semver({"v": "v1.0.0"}, "v")
+
+
+def test_phone_number_validator():
+    # Valid E.164 phone numbers
+    assert phone_number({"p": "+14155552671"}, "p") == "+14155552671"
+    assert phone_number({"p": "+442071838750"}, "p") == "+442071838750"
+
+    # Optional phone number
+    assert phone_number({}, "p", required=False) == ""
+    assert phone_number({"p": ""}, "p", required=False) == ""
+
+    # Required missing
+    with pytest.raises(ApiError):
+        phone_number({}, "p", required=True)
+
+    # Invalid formats
+    with pytest.raises(ApiError):
+        phone_number({"p": "4155552671"}, "p")  # missing leading plus
+    with pytest.raises(ApiError):
+        phone_number({"p": "+012345678"}, "p")  # country code cannot start with 0
+    with pytest.raises(ApiError):
+        phone_number({"p": "+1-415-555-2671"}, "p")  # dashes not permitted in E.164
+    with pytest.raises(ApiError):
+        phone_number({"p": "+14155552671890123456"}, "p")  # exceeds 15 digits
+
 

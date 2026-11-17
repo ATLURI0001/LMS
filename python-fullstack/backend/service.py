@@ -184,6 +184,29 @@ def iso_date_only(data, key, required=True):
     return val
 
 
+def semver(data, key, required=True):
+    val = text(data, key, 1 if required else 0, 60)
+    if not val:
+        return ""
+    pattern = (
+        r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)"
+        r"(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)"
+        r"(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?"
+        r"(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
+    )
+    need(re.match(pattern, val) is not None, f"{key} must be a valid semantic version string", 422)
+    return val
+
+
+def phone_number(data, key, required=True):
+    val = text(data, key, 1 if required else 0, 16)
+    if not val:
+        return ""
+    pattern = r"^\+[1-9]\d{1,14}$"
+    need(re.match(pattern, val) is not None, f"{key} must be a valid E.164 phone number", 422)
+    return val
+
+
 def date(data, key):
     value = text(data, key, 1, 40)
     try:
